@@ -8,19 +8,21 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
 });
 
-client.on('message', async msg => {
-  const matched = msg.content.match(/(https*:\/\/)*(www.)*(reddit.com)\/r\/[^/]+\/comments\/([^/]+)(.*)/);
-  if(matched) {
+client.on('message', async (msg) => {
+  const matched = msg.content.match(
+    /(https*:\/\/)*(www.)*(reddit.com)\/r\/[^/]+\/comments\/([^/]+)(.*)/
+  );
+  if (matched) {
     const postID = matched[4];
     redditHandler(msg, postID);
   }
-})
+});
 
 client.login();
 
 const redditHandler = async (msg, postID) => {
   const url = `https://reddit.com/${postID}.json`;
-  
+
   const response = await fetch(url);
   const json = await response.json();
   const data = json[0].data.children[0].data;
@@ -31,21 +33,21 @@ const redditHandler = async (msg, postID) => {
     author: data.author,
     permalink: data.permalink,
     isVideo: data.isVideo,
-    imageURL: data.url
+    imageURL: data.url,
   };
 
-  console.log(post)
+  console.log(post);
 
-  if(post.imageURL) {
+  if (post.imageURL) {
     const embed = new Discord.MessageEmbed()
-    .setColor('#ff4500')
-    .setAuthor(msg.author.username, msg.author.avatarURL())
-    .setTitle(post.title)
-    .setURL(`https://reddit.com${post.permalink}`)
-    .setDescription(`/u/${post.author} in /r/${post.subreddit}`)
-    .setImage(post.imageURL);
+      .setColor('#ff4500')
+      .setAuthor(msg.author.username, msg.author.avatarURL())
+      .setTitle(post.title)
+      .setURL(`https://reddit.com${post.permalink}`)
+      .setDescription(`/u/${post.author} in /r/${post.subreddit}`)
+      .setImage(post.imageURL);
 
-    await msg.channel.send(embed)
-    msg.delete()
+    await msg.channel.send(embed);
+    msg.delete();
   }
-}
+};
