@@ -36,8 +36,6 @@ const redditHandler = async (msg, postID) => {
     imageURL: data.url,
   };
 
-  console.log(post);
-
   if (post.imageURL) {
     const embed = new Discord.MessageEmbed()
       .setColor('#ff4500')
