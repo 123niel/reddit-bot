@@ -42,7 +42,7 @@ const redditHandler = async (msg, postID) => {
       .setAuthor(msg.author.username, msg.author.avatarURL())
       .setTitle(post.title)
       .setURL(`https://reddit.com${post.permalink}`)
-      .setDescription(`/u/${post.author} in /r/${post.subreddit}`)
+      .setDescription(`by /u/${post.author} at /r/${post.subreddit}`)
       .setImage(post.imageURL);
 
     await msg.channel.send(embed);
