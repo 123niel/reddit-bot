@@ -29,7 +29,7 @@ const redditHandler = async (msg, postID) => {
 
   const post = {
     title: data.title,
-    subreddit: data.subreddit,
+    subreddit: data.subreddit_name_prefixed,
     author: data.author,
     permalink: data.permalink,
     isVideo: data.isVideo,
@@ -42,8 +42,9 @@ const redditHandler = async (msg, postID) => {
       .setAuthor(msg.author.username, msg.author.avatarURL())
       .setTitle(post.title)
       .setURL(`https://reddit.com${post.permalink}`)
-      .setDescription(`by /u/${post.author} at /r/${post.subreddit}`)
-      .setImage(post.imageURL);
+      .setDescription(`by /u/${post.author} at ${post.subreddit}`);
+
+    if (!post.isVideo) embed = embed.setImage(post.imageURL);
 
     await msg.channel.send(embed);
     msg.delete();
