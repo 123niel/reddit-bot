@@ -32,19 +32,22 @@ const redditHandler = async (msg, postID) => {
     subreddit: data.subreddit_name_prefixed,
     author: data.author,
     permalink: data.permalink,
-    isVideo: data.isVideo,
+    isVideo: data.is_video,
     imageURL: data.url,
+    crosspost: !!data.crosspost_parent_list,
   };
 
   if (post.imageURL) {
-    const embed = new Discord.MessageEmbed()
+    let embed = new Discord.MessageEmbed()
       .setColor('#ff4500')
       .setAuthor(msg.author.username, msg.author.avatarURL())
       .setTitle(post.title)
       .setURL(`https://reddit.com${post.permalink}`)
       .setDescription(`by /u/${post.author} at ${post.subreddit}`);
 
-    if (!post.isVideo) embed = embed.setImage(post.imageURL);
+    console.log(post);
+
+    if (!post.isVideo && !post.crosspost) embed.setImage(post.imageURL);
 
     await msg.channel.send(embed);
     msg.delete();
