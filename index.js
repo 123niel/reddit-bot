@@ -4,8 +4,14 @@ require('dotenv').config();
 
 const client = new Discord.Client();
 
-client.on('ready', () => {
+client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}`);
+  const guilds = client.guilds.cache.map((guild) => guild.name).join(', ');
+  console.log(`Bot active in guilds: ${guilds}`);
+});
+
+client.on('guildCreate', async (guild) => {
+  console.log(`joined guild ${guild.name}`);
 });
 
 client.on('message', async (msg) => {
