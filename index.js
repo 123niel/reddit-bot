@@ -45,7 +45,10 @@ const redditHandler = async (msg, postID) => {
       .setURL(`https://reddit.com${post.permalink}`)
       .setDescription(`by /u/${post.author} at ${post.subreddit}`);
 
-    console.log(post);
+    console.log({
+      guildName: msg.guild.name,
+      post,
+    });
 
     if (!post.isVideo && !post.crosspost) embed.setImage(post.imageURL);
 
