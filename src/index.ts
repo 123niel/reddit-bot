@@ -48,12 +48,13 @@ const redditHandler = async (msg: Message, postID: String) => {
     const embed = new MessageEmbed()
       .setColor('#ff4500')
       .setAuthor(msg.author.username, msg.author.avatarURL() || "")
-      .setTitle(post.title)
+      .setTitle(`${post.subreddit} - ${post.title}`)
       .setURL(`https://reddit.com${post.permalink}`)
-      .setDescription(`by /u/${post.author} at ${post.subreddit}`);
+      .setFooter(`by /u/${post.author}`);
 
     console.log({
       guildName: msg.guild?.name,
+      userName: msg.author.username,
       post,
     });
 
