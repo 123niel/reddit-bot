@@ -1,11 +1,12 @@
-const Discord = require('discord.js');
-const fetch = require('node-fetch');
+import { Client, Message, MessageEmbed } from 'discord.js'
+import fetch from 'node-fetch'
+
 require('dotenv').config();
 
-const client = new Discord.Client();
+const client = new Client();
 
 client.on('ready', async () => {
-  console.log(`Logged in as ${client.user.tag}`);
+  console.log(`Logged in as ${client.user?.tag}`);
   const guilds = client.guilds.cache.map((guild) => guild.name).join(', ');
   console.log(`Bot active in guilds: ${guilds}`);
 });
@@ -26,7 +27,7 @@ client.on('message', async (msg) => {
 
 client.login();
 
-const redditHandler = async (msg, postID) => {
+const redditHandler = async (msg: Message, postID: String) => {
   const url = `https://reddit.com/${postID}.json`;
 
   const response = await fetch(url);
@@ -44,15 +45,15 @@ const redditHandler = async (msg, postID) => {
   };
 
   if (post.imageURL) {
-    let embed = new Discord.MessageEmbed()
+    const embed = new MessageEmbed()
       .setColor('#ff4500')
-      .setAuthor(msg.author.username, msg.author.avatarURL())
+      .setAuthor(msg.author.username, msg.author.avatarURL() || "")
       .setTitle(post.title)
       .setURL(`https://reddit.com${post.permalink}`)
       .setDescription(`by /u/${post.author} at ${post.subreddit}`);
 
     console.log({
-      guildName: msg.guild.name,
+      guildName: msg.guild?.name,
       post,
     });
 
