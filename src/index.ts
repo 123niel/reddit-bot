@@ -27,7 +27,7 @@ client.on('message', async (msg) => {
 
 client.login();
 
-const redditHandler = async (msg: Message, postID: String) => {
+const redditHandler = async (msg: Message, postID: string) => {
   const url = `https://reddit.com/${postID}.json`;
 
   const response = await fetch(url);
@@ -44,23 +44,29 @@ const redditHandler = async (msg: Message, postID: String) => {
     crosspost: !!data.crosspost_parent_list,
   };
 
-  if (post.imageURL) {
-    const embed = new MessageEmbed()
-      .setColor('#ff4500')
-      .setAuthor(msg.author.username, msg.author.avatarURL() || "")
-      .setTitle(`${post.subreddit} - ${post.title}`)
-      .setURL(`https://reddit.com${post.permalink}`)
-      .setFooter(`by /u/${post.author}`);
 
-    console.log({
-      guildName: msg.guild?.name,
-      userName: msg.author.username,
-      post,
-    });
+  const embed = new MessageEmbed()
+    .setColor('#ff4500')
+    .setAuthor(msg.author.username, msg.author.avatarURL() || "")
+    .setTitle(`${post.subreddit} - ${post.title}`)
+    .setURL(`https://reddit.com${post.permalink}`)
+    .setFooter(`by /u/${post.author}`);
 
-    if (!post.isVideo && !post.crosspost) embed.setImage(post.imageURL);
+  console.log({
+    guildName: msg.guild?.name,
+    userName: msg.author.username,
+    post,
+  });
 
-    await msg.channel.send(embed);
-    msg.delete();
+  if (!post.isVideo && !post.crosspost) embed.setImage(post.imageURL);
+
+  await msg.channel.send(embed);
+
+  if (post.isVideo) {
+    let videoURL: string = data.media.reddit_video.fallback_url;
+    videoURL = videoURL.substr(0, videoURL.indexOf('?'))
+    msg.channel.send('', { files: [videoURL] })
   }
+  msg.delete();
+
 };
