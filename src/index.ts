@@ -44,10 +44,9 @@ const redditHandler = async (msg: Message, postID: string) => {
     crosspost: !!data.crosspost_parent_list,
   };
 
-
   const embed = new MessageEmbed()
     .setColor('#ff4500')
-    .setAuthor(msg.author.username, msg.author.avatarURL() || "")
+    .setAuthor(msg.guild?.member(msg.author)?.nickname, msg.author.avatarURL() || "")
     .setTitle(`${post.subreddit} - ${post.title}`)
     .setURL(`https://reddit.com${post.permalink}`)
     .setFooter(`by /u/${post.author}`);
